@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.Asset;
+import br.com.brunov.controla_ativos.controla_ativos.employee.entities.Employee;
 
 @Entity
 @Table(name = "loans")
@@ -24,13 +25,9 @@ public class Loan {
     @JoinColumn(name = "asset_id", nullable = false)
     private Asset asset;
 
-    /*
-     * Por enquanto vamos utilizar apenas o ID do colaborador.
-     * Quando criarmos o módulo employee, podemos transformar
-     * isso em um relacionamento @ManyToOne.
-     */
-    @Column(name = "employee_id", nullable = false)
-    private Long employeeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
 
     @Column(name = "scheduled_start", nullable = false)
     private LocalDateTime scheduledStart;

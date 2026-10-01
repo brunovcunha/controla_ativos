@@ -1,4 +1,4 @@
-package br.com.brunov.controla_ativos.controla_ativos.employee;
+package br.com.brunov.controla_ativos.controla_ativos.employee.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

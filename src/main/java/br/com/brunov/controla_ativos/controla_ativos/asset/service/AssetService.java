@@ -2,6 +2,7 @@ package br.com.brunov.controla_ativos.controla_ativos.asset.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.brunov.controla_ativos.controla_ativos.asset.dto.AssetRequest;
@@ -11,6 +12,7 @@ import br.com.brunov.controla_ativos.controla_ativos.asset.entities.Asset;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetStatus;
 import br.com.brunov.controla_ativos.controla_ativos.asset.repository.AssetRepository;
 
+@Service 
 public class AssetService {
 
     private final AssetRepository assetRepository;

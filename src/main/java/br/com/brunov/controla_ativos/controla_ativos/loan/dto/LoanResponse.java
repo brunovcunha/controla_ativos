@@ -49,7 +49,7 @@ public record LoanResponse(
 
             loan.getAsset().getName(),
 
-            loan.getEmployeeId(),
+            loan.getEmployee().getId(),
 
             loan.getScheduledStart(),
 

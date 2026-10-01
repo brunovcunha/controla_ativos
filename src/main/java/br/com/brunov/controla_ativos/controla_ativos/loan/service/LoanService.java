@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.Asset;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetStatus;
 import br.com.brunov.controla_ativos.controla_ativos.asset.repository.AssetRepository;
+import br.com.brunov.controla_ativos.controla_ativos.employee.entities.Employee;
+import br.com.brunov.controla_ativos.controla_ativos.employee.repository.EmployeeRepository;
 import br.com.brunov.controla_ativos.controla_ativos.loan.dto.LoanRequest;
 import br.com.brunov.controla_ativos.controla_ativos.loan.dto.LoanResponse;
 import br.com.brunov.controla_ativos.controla_ativos.loan.dto.LoanUpdateRequest;
@@ -23,6 +25,7 @@ public class LoanService {
 
     private final LoanRepository loanRepository;
     private final AssetRepository assetRepository;
+    private final EmployeeRepository employeeRepository;
 
 
     @Transactional
@@ -49,9 +52,16 @@ public class LoanService {
             null
         );
 
+        Employee employee = employeeRepository.findById(request.employeeId())
+    .orElseThrow(() ->
+        new RuntimeException(
+            "Funcionário não encontrado: " + request.employeeId()
+        )
+    );
+
         Loan loan = Loan.builder()
             .asset(asset)
-            .employeeId(request.employeeId())
+            .employee(employee)
             .scheduledStart(request.scheduledStart())
             .scheduledEnd(request.scheduledEnd())
             .purpose(request.purpose())
@@ -119,8 +129,15 @@ public class LoanService {
             id
         );
 
+        Employee employee = employeeRepository.findById(request.employeeId())
+    .orElseThrow(() ->
+        new RuntimeException(
+            "Funcionário não encontrado: " + request.employeeId()
+        )
+    );
+
         loan.setAsset(asset);
-        loan.setEmployeeId(request.employeeId());
+        loan.setEmployee(employee);
         loan.setScheduledStart(request.scheduledStart());
         loan.setScheduledEnd(request.scheduledEnd());
         loan.setPurpose(request.purpose());

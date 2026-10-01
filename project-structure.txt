@@ -1,0 +1,102 @@
+                         FRONTEND
+                    React + JavaScript
+                           │
+                           │ REST / JSON
+                           ▼
+┌──────────────────────────────────────────────────────────┐
+│                     IT OPERATIONS API                    │
+│                    Spring Boot / Java                    │
+│                                                          │
+│  ┌─────────────┐   ┌─────────────┐   ┌──────────────┐    │
+│  │   Assets    │   │   Loans     │   │  Employees   │    │
+│  │  Ativos     │   │ Empréstimos │   │ Colaboradores│    │
+│  └──────┬──────┘   └──────┬──────┘   └──────┬───────┘    │
+│         │                 │                  │           │
+│         └─────────────────┼──────────────────┘           │
+│                           │                              │
+│                    ┌──────▼──────┐                       │
+│                    │   Shared    │                       │
+│                    │ Exceptions  │                       │
+│                    │ Security    │                       │
+│                    │ Validation  │                       │
+│                    └──────┬──────┘                       │
+│                           │                              │
+│                    Spring Data JPA                       │
+└───────────────────────────┬──────────────────────────────┘
+                            │
+                            ▼
+                       PostgreSQL
+
+
+├── ItOperationsApplication.java
+│
+├── asset/
+│   ├── controller/
+│   ├── dto/
+│   ├── entity/
+│   ├── repository/
+│   └── service/
+│
+├── loan/
+│   ├── controller/
+│   ├── dto/
+│   ├── entity/
+│   ├── repository/
+│   └── service/
+│
+├── employee/
+│   ├── controller/
+│   ├── dto/
+│   ├── entity/
+│   ├── repository/
+│   └── service/
+│
+├── department/
+│   ├── controller/
+│   ├── dto/
+│   ├── entity/
+│   ├── repository/
+│   └── service/
+│
+├── location/
+│   ├── controller/
+│   ├── dto/
+│   ├── entity/
+│   ├── repository/
+│   └── service/
+│
+├── shared/
+│   ├── exception/
+│   ├── response/
+│   ├── validation/
+│   └── util/
+│
+└── config/
+    ├── security/
+    ├── jackson/
+    └── database/
+
+
+---------------------------------------------------------------
+
+Asset Module
+asset/
+│
+├── controller/
+│   └── AssetController.java
+│
+├── dto/
+│   ├── AssetRequest.java
+│   ├── AssetResponse.java
+│   └── AssetUpdateRequest.java
+│
+├── entity/
+│   ├── Asset.java
+│   ├── AssetStatus.java
+│   └── AssetType.java
+│
+├── repository/
+│   └── AssetRepository.java
+│
+└── service/
+    └── AssetService.java

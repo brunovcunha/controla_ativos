@@ -1,4 +1,4 @@
-package br.com.brunov.controla_ativos.controla_ativos.department;
+package br.com.brunov.controla_ativos.controla_ativos.department.entities;
 
 import java.time.LocalDateTime;
 

@@ -26,6 +26,9 @@ public record EmployeeRequest(
     String jobTitle,
 
     @Size(max = 500)
-    String notes
+    String notes,
+
+    @NotBlank(message = "O departamento é obrigatório.")
+    Long departmentId
 ) {
 }

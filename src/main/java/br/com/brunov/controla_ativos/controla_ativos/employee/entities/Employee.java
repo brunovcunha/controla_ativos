@@ -5,16 +5,12 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import br.com.brunov.controla_ativos.controla_ativos.department.entities.Department;
+
 @Entity
-@Table(
-    name = "employees",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "uk_employee_registration",
-            columnNames = "registration"
-        )
-    }
-)
+@Table(name = "employees", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_employee_registration", columnNames = "registration")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -53,6 +49,10 @@ public class Employee {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 
     @PrePersist
     protected void onCreate() {

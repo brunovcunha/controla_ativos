@@ -25,7 +25,15 @@ public record EmployeeResponse(
 
     LocalDateTime createdAt,
 
-    LocalDateTime updatedAt
+    LocalDateTime updatedAt,
+
+    Long departmentId,
+
+    String departmentCode,
+
+    String departmentName,
+
+    Boolean departmentStatus
 
 ) {
 
@@ -51,7 +59,15 @@ public record EmployeeResponse(
 
             employee.getCreatedAt(),
 
-            employee.getUpdatedAt()
+            employee.getUpdatedAt(),
+            
+            employee.getDepartment().getId(),
+
+            employee.getDepartment().getCode(),
+
+            employee.getDepartment().getName(),
+
+            employee.getDepartment().getActive()
         );
     }
 }

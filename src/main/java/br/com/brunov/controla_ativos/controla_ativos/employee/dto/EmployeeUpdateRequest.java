@@ -32,6 +32,10 @@ public record EmployeeUpdateRequest(
     EmployeeStatus status,
 
     @Size(max = 500)
-    String notes
+    String notes,
+
+    @NotNull(message = "O id do departamento é obrigatório")
+    Long departmentId
+    
 ) {
 }

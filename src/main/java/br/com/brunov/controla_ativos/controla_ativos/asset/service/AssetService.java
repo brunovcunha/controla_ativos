@@ -11,14 +11,18 @@ import br.com.brunov.controla_ativos.controla_ativos.asset.dto.AssetUpdateReques
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.Asset;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetStatus;
 import br.com.brunov.controla_ativos.controla_ativos.asset.repository.AssetRepository;
+import br.com.brunov.controla_ativos.controla_ativos.location.entities.Location;
+import br.com.brunov.controla_ativos.controla_ativos.location.repository.LocationRepository;
 
 @Service 
 public class AssetService {
 
     private final AssetRepository assetRepository;
+    private final LocationRepository locationRepository;
 
-    public AssetService(AssetRepository assetRepository) {
+    public AssetService(AssetRepository assetRepository, LocationRepository locationRepository) {
         this.assetRepository = assetRepository;
+        this.locationRepository = locationRepository;
     }
 
     @Transactional
@@ -82,6 +86,10 @@ public class AssetService {
                 )
             );
 
+        Location location = locationRepository.findById(request.locationId()).orElseThrow(() -> 
+                new RuntimeException("Localização do ativo não encontrada!")
+    );
+
         asset.setAssetTag(request.assetTag());
         asset.setName(request.name());
         asset.setType(request.type());
@@ -91,6 +99,7 @@ public class AssetService {
         asset.setStatus(request.status());
         asset.setPurchaseDate(request.purchaseDate());
         asset.setNotes(request.notes());
+        asset.setLocation(location);
 
         Asset updatedAsset = assetRepository.save(asset);
 

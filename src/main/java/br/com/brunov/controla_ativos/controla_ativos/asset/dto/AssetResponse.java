@@ -20,7 +20,8 @@ public record AssetResponse(
         LocalDate purchaseDate,
         String notes,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt) {
+        LocalDateTime updatedAt,
+        Long locationId) {
 
     public static AssetResponse fromEntity(Asset asset) {
 
@@ -36,6 +37,7 @@ public record AssetResponse(
                 asset.getPurchaseDate(),
                 asset.getNotes(),
                 asset.getCreatedAt(),
-                asset.getUpdatedAt());
+                asset.getUpdatedAt(),
+                asset.getLocation().getId());
     }
 }

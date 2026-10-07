@@ -2,13 +2,17 @@ package br.com.brunov.controla_ativos.controla_ativos.asset.entities;
 
 import java.time.LocalDateTime;
 
+import br.com.brunov.controla_ativos.controla_ativos.location.entities.Location;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -20,15 +24,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(
-    name = "assets",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "uk_asset_asset_tag",
-            columnNames = "asset_tag"
-        )
-    }
-)
+@Table(name = "assets", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_asset_asset_tag", columnNames = "asset_tag")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -74,6 +72,10 @@ public class Asset {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
+    private Location location;
 
     @PrePersist
     protected void onCreate() {

@@ -31,7 +31,10 @@ public record AssetRequest(
     LocalDate purchaseDate,
 
     @Size(max = 500)
-    String notes
+    String notes,
+
+    @NotBlank(message = "A localização é obrigatória.")
+    Long locationId
 ) {
     
 }

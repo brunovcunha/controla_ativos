@@ -16,8 +16,14 @@ import br.com.brunov.controla_ativos.controla_ativos.loan.dto.LoanRequest;
 import br.com.brunov.controla_ativos.controla_ativos.loan.dto.LoanResponse;
 import br.com.brunov.controla_ativos.controla_ativos.loan.dto.LoanUpdateRequest;
 import br.com.brunov.controla_ativos.controla_ativos.loan.service.LoanService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+@Tag (
+    name = "Empréstimos",
+    description = "Gerenciamento dos empréstimos da empresa"
+)
 
 @RestController
 @RequestMapping("/api/loans")

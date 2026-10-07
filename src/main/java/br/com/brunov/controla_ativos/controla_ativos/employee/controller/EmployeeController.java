@@ -17,8 +17,14 @@ import br.com.brunov.controla_ativos.controla_ativos.employee.dto.EmployeeReques
 import br.com.brunov.controla_ativos.controla_ativos.employee.dto.EmployeeResponse;
 import br.com.brunov.controla_ativos.controla_ativos.employee.dto.EmployeeUpdateRequest;
 import br.com.brunov.controla_ativos.controla_ativos.employee.service.EmployeeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+@Tag (
+    name = "Funcionários",
+    description = "Gerenciamento dos funcionários da empresa"
+)
 
 @RestController
 @RequestMapping("/api/employees")

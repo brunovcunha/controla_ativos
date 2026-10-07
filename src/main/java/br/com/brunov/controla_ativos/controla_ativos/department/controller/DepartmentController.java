@@ -17,8 +17,14 @@ import br.com.brunov.controla_ativos.controla_ativos.department.dto.DepartmentRe
 import br.com.brunov.controla_ativos.controla_ativos.department.dto.DepartmentResponse;
 import br.com.brunov.controla_ativos.controla_ativos.department.dto.DepartmentUpdateRequest;
 import br.com.brunov.controla_ativos.controla_ativos.department.service.DepartmentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+@Tag (
+    name = "Departamentos",
+    description = "Gerenciamento dos departamentos da empresa"
+)
 
 @RestController
 @RequestMapping("/api/departments")

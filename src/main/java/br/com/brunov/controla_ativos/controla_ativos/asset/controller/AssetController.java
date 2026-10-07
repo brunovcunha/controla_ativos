@@ -17,8 +17,14 @@ import br.com.brunov.controla_ativos.controla_ativos.asset.dto.AssetRequest;
 import br.com.brunov.controla_ativos.controla_ativos.asset.dto.AssetResponse;
 import br.com.brunov.controla_ativos.controla_ativos.asset.dto.AssetUpdateRequest;
 import br.com.brunov.controla_ativos.controla_ativos.asset.service.AssetService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+@Tag(
+    name = "Ativos",
+    description = "Gerenciamento dos ativos da empresa"
+)
 
 @RestController
 @RequestMapping("/api/assets")

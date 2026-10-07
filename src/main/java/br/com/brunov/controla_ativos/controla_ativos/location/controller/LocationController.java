@@ -18,8 +18,14 @@ import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationReques
 import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationResponse;
 import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationUpdateRequest;
 import br.com.brunov.controla_ativos.controla_ativos.location.service.LocationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+@Tag (
+    name = "Localizações",
+    description = "Gerenciamento de localizações da empresa"
+)
 
 @RestController
 @RequestMapping("/api/locations")

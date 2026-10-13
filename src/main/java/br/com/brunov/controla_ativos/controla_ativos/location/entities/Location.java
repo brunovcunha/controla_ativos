@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 @Entity
 @Table(
     name = "locations",
@@ -26,7 +28,7 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String code;
 
     @Column(nullable = false, length = 100)

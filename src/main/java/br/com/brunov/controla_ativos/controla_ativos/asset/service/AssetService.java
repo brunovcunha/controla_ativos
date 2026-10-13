@@ -16,7 +16,6 @@ import br.com.brunov.controla_ativos.controla_ativos.location.repository.Locatio
 
 @Service 
 public class AssetService {
-
     private final AssetRepository assetRepository;
     private final LocationRepository locationRepository;
 

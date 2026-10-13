@@ -1,6 +1,5 @@
 package br.com.brunov.controla_ativos.controla_ativos.location.service;
 
-
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -17,91 +16,97 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LocationService {
 
-    private final LocationRepository locationRepository;
+        private final LocationRepository locationRepository;
 
-    @Transactional
-    public LocationResponse create(LocationRequest request) {
+        @Transactional
+        public LocationResponse create(LocationRequest request) {
 
-        if (locationRepository.existsByCode(request.code())) {
+                if (locationRepository.existsByCode(request.code())) {
 
-            throw new IllegalArgumentException(
-                    "Já existe uma localização com o código: "
-                            + request.code());
+                        throw new IllegalArgumentException(
+                                        "Já existe uma localização com o código: "
+                                                        + request.code());
+                }
+
+                Location location = Location.builder()
+                                .code(request.code())
+                                .name(request.name())
+                                .description(request.description())
+                                .active(true)
+                                .build();
+
+                Location savedLocation = locationRepository.save(location);
+
+                return LocationResponse.fromEntity(savedLocation);
         }
 
-        Location location = Location.builder()
-                .code(request.code())
-                .name(request.name())
-                .description(request.description())
-                .active(true)
-                .build();
+        @Transactional(readOnly = true)
+        public List<LocationResponse> findAll() {
 
-        Location savedLocation = locationRepository.save(location);
-
-        return LocationResponse.fromEntity(savedLocation);
-    }
-
-    @Transactional(readOnly = true)
-    public List<LocationResponse> findAll() {
-
-        return locationRepository.findAll()
-                .stream()
-                .map(LocationResponse::fromEntity)
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
-    public LocationResponse findById(Long id) {
-
-        Location location = findLocation(id);
-
-        return LocationResponse.fromEntity(location);
-    }
-
-    @Transactional
-    public LocationResponse update(
-            Long id,
-            LocationUpdateRequest request) {
-
-        Location location = findLocation(id);
-
-        if (!location.getCode()
-                .equals(request.code())
-                && locationRepository
-                        .existsByCode(request.code())) {
-
-            throw new IllegalArgumentException(
-                    "Já existe uma localização com o código: "
-                            + request.code());
+                return locationRepository.findAll()
+                                .stream()
+                                .map(LocationResponse::fromEntity)
+                                .toList();
         }
 
-        location.setCode(request.code());
-        location.setName(request.name());
-        location.setDescription(request.description());
-        location.setActive(request.active());
+        @Transactional(readOnly = true)
+        public LocationResponse findById(Long id) {
 
-        Location updatedLocation =
-                locationRepository.save(location);
+                Location location = findLocation(id);
 
-        return LocationResponse.fromEntity(updatedLocation);
-    }
+                return LocationResponse.fromEntity(location);
+        }
 
-    @Transactional
-    public void delete(Long id) {
+        @Transactional
+        public LocationResponse update(
+                        Long id,
+                        LocationUpdateRequest request) {
 
-        Location location = findLocation(id);
+                Location location = findLocation(id);
 
-        // Exclusão lógica
-        location.setActive(false);
+                if (request.code() != null) {
+                        if (!location.getCode().equals(request.code())
+                                        && locationRepository.existsByCode(request.code())) {
 
-        locationRepository.save(location);
-    }
+                                throw new IllegalArgumentException(
+                                                "Já existe uma localização com o código: "
+                                                                + request.code());
+                        }
 
-    private Location findLocation(Long id) {
+                        location.setCode(request.code());
+                }
 
-        return locationRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Localização não encontrada: " + id));
-    }
+                if (request.name() != null) {
+                        location.setName(request.name());
+                }
+
+                if (request.description() != null) {
+                        location.setDescription(request.description());
+                }
+
+                if (request.active() != null) {
+                        location.setActive(request.active());
+                }
+
+                Location updatedLocation = locationRepository.save(location);
+
+                return LocationResponse.fromEntity(updatedLocation);
+        }
+
+        @Transactional
+        public void delete(Long id) {
+
+                Location location = findLocation(id);
+
+                // Exclusão total
+
+                locationRepository.deleteById(location.getId());
+        }
+
+        private Location findLocation(Long id) {
+
+                return locationRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException(
+                                                "Localização não encontrada: " + id));
+        }
 }

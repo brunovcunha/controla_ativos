@@ -2,6 +2,7 @@ package br.com.brunov.controla_ativos.controla_ativos.employee.dto;
 
 import java.time.LocalDateTime;
 
+import br.com.brunov.controla_ativos.controla_ativos.department.entities.Department;
 import br.com.brunov.controla_ativos.controla_ativos.employee.entities.Employee;
 import br.com.brunov.controla_ativos.controla_ativos.employee.entities.EmployeeStatus;
 
@@ -27,13 +28,7 @@ public record EmployeeResponse(
 
     LocalDateTime updatedAt,
 
-    Long departmentId,
-
-    String departmentCode,
-
-    String departmentName,
-
-    Boolean departmentStatus
+    Department department
 
 ) {
 
@@ -60,14 +55,8 @@ public record EmployeeResponse(
             employee.getCreatedAt(),
 
             employee.getUpdatedAt(),
-            
-            employee.getDepartment().getId(),
 
-            employee.getDepartment().getCode(),
-
-            employee.getDepartment().getName(),
-
-            employee.getDepartment().getActive()
+            employee.getDepartment()
         );
     }
 }

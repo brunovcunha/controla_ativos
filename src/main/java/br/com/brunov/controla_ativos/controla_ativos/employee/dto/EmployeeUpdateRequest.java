@@ -9,15 +9,15 @@ import jakarta.validation.constraints.Size;
 
 public record EmployeeUpdateRequest(
 
-    @NotBlank(message = "A matrícula é obrigatória.")
+    // @NotBlank(message = "A matrícula é obrigatória.")
     @Size(max = 20)
     String registration,
 
-    @NotBlank(message = "O nome é obrigatório.")
+    // @NotBlank(message = "O nome é obrigatório.")
     @Size(max = 150)
     String name,
 
-    @NotBlank(message = "O e-mail é obrigatório.")
+    // @NotBlank(message = "O e-mail é obrigatório.")
     @Email(message = "Informe um e-mail válido.")
     @Size(max = 150)
     String email,
@@ -28,13 +28,13 @@ public record EmployeeUpdateRequest(
     @Size(max = 100)
     String jobTitle,
 
-    @NotNull(message = "O status é obrigatório.")
+    // @NotNull(message = "O status é obrigatório.")
     EmployeeStatus status,
 
     @Size(max = 500)
     String notes,
 
-    @NotNull(message = "O id do departamento é obrigatório")
+    // @NotNull(message = "O id do departamento é obrigatório")
     Long departmentId
     
 ) {

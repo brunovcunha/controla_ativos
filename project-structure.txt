@@ -84,4 +84,6 @@ Employee   1 ─── N Loan
 Asset      1 ─── N Loan
 Location   1 ─── N Asset
 
+Sequência de criação para testes: Location -> Department -> Employee
+
 ---------------------------------------------------------------

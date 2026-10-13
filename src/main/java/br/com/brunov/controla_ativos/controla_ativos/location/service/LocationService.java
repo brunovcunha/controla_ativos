@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.brunov.controla_ativos.controla_ativos.department.entities.Department;
 import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationRequest;
 import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationResponse;
 import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationUpdateRequest;
@@ -98,9 +99,15 @@ public class LocationService {
 
                 Location location = findLocation(id);
 
-                // Exclusão total
+                /*
+                 * Não excluímos fisicamente o departamento.
+                 *
+                 * Isso preserva o histórico dos funcionários
+                 * que pertenciam ao departamento.
+                 */
+                location.setActive(false);
 
-                locationRepository.deleteById(location.getId());
+                locationRepository.save(location);
         }
 
         private Location findLocation(Long id) {
@@ -109,4 +116,5 @@ public class LocationService {
                                 .orElseThrow(() -> new RuntimeException(
                                                 "Localização não encontrada: " + id));
         }
+
 }

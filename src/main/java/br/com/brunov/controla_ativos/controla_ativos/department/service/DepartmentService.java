@@ -18,109 +18,99 @@ public class DepartmentService {
 
     private final DepartmentRepository departmentRepository;
 
-
     @Transactional
     public DepartmentResponse create(
-        DepartmentRequest request
-    ) {
+            DepartmentRequest request) {
 
         if (departmentRepository
                 .existsByCode(request.code())) {
 
             throw new IllegalArgumentException(
-                "Já existe um departamento com o código: "
-                    + request.code()
-            );
+                    "Já existe um departamento com o código: "
+                            + request.code());
         }
 
         Department department = Department.builder()
-            .code(request.code())
-            .name(request.name())
-            .description(request.description())
-            .active(true)
-            .build();
+                .code(request.code())
+                .name(request.name())
+                .description(request.description())
+                .active(true)
+                .build();
 
-        Department savedDepartment =
-            departmentRepository.save(department);
+        Department savedDepartment = departmentRepository.save(department);
 
         return DepartmentResponse.fromEntity(
-            savedDepartment
-        );
+                savedDepartment);
     }
-
 
     @Transactional(readOnly = true)
     public List<DepartmentResponse> findAll() {
 
         return departmentRepository.findAll()
-            .stream()
-            .map(DepartmentResponse::fromEntity)
-            .toList();
+                .stream()
+                .map(DepartmentResponse::fromEntity)
+                .toList();
     }
-
 
     @Transactional(readOnly = true)
     public DepartmentResponse findById(Long id) {
 
-        Department department =
-            findDepartment(id);
+        Department department = findDepartment(id);
 
         return DepartmentResponse.fromEntity(
-            department
-        );
+                department);
     }
-
 
     @Transactional
     public DepartmentResponse update(
-        Long id,
-        DepartmentUpdateRequest request
-    ) {
+            Long id,
+            DepartmentUpdateRequest request) {
 
-        Department department =
-            findDepartment(id);
+        Department department = findDepartment(id);
 
-        if (!department.getCode()
-                .equalsIgnoreCase(request.code())
-                && departmentRepository
-                    .existsByCode(request.code())) {
+        if (request.code() != null) {
 
-            throw new IllegalArgumentException(
-                "Já existe um departamento com o código: "
-                    + request.code()
-            );
+            if (!department.getCode()
+                    .equalsIgnoreCase(request.code())
+                    && departmentRepository
+                            .existsByCode(request.code())) {
+
+                throw new IllegalArgumentException(
+                        "Já existe um departamento com o código: "
+                                + request.code());
+            }
+            department.setCode(
+                    request.code());
         }
 
-        department.setCode(
-            request.code()
-        );
+        if (request.name() != null) {
+            department.setName(
+                    request.name());
 
-        department.setName(
-            request.name()
-        );
+        }
 
-        department.setDescription(
-            request.description()
-        );
+        if (request.description() != null) {
+            department.setDescription(
+                    request.description());
 
-        department.setActive(
-            request.active()
-        );
+        }
 
-        Department updatedDepartment =
-            departmentRepository.save(department);
+        if (request.active() != null) {
+            department.setActive(
+                    request.active());
+
+        }
+
+        Department updatedDepartment = departmentRepository.save(department);
 
         return DepartmentResponse.fromEntity(
-            updatedDepartment
-        );
+                updatedDepartment);
     }
-
 
     @Transactional
     public void delete(Long id) {
 
-        Department department =
-            findDepartment(id);
+        Department department = findDepartment(id);
 
         /*
          * Não excluímos fisicamente o departamento.
@@ -133,14 +123,10 @@ public class DepartmentService {
         departmentRepository.save(department);
     }
 
-
     private Department findDepartment(Long id) {
 
         return departmentRepository.findById(id)
-            .orElseThrow(() ->
-                new RuntimeException(
-                    "Departamento não encontrado: " + id
-                )
-            );
+                .orElseThrow(() -> new RuntimeException(
+                        "Departamento não encontrado: " + id));
     }
 }

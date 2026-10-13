@@ -79,24 +79,9 @@
 
 ---------------------------------------------------------------
 
-Asset Module
-asset/
-│
-├── controller/
-│   └── AssetController.java
-│
-├── dto/
-│   ├── AssetRequest.java
-│   ├── AssetResponse.java
-│   └── AssetUpdateRequest.java
-│
-├── entity/
-│   ├── Asset.java
-│   ├── AssetStatus.java
-│   └── AssetType.java
-│
-├── repository/
-│   └── AssetRepository.java
-│
-└── service/
-    └── AssetService.java
+Department 1 ─── N Employee
+Employee   1 ─── N Loan
+Asset      1 ─── N Loan
+Location   1 ─── N Asset
+
+---------------------------------------------------------------

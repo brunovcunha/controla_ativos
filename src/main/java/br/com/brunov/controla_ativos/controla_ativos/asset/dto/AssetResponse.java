@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.Asset;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetStatus;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetType;
+import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationResponse;
+import br.com.brunov.controla_ativos.controla_ativos.location.entities.Location;
 
 public record AssetResponse(
 
@@ -21,10 +23,9 @@ public record AssetResponse(
         String notes,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        Long locationId) {
+        LocationResponse location) {
 
     public static AssetResponse fromEntity(Asset asset) {
-
         return new AssetResponse(
                 asset.getId(),
                 asset.getAssetTag(),
@@ -38,6 +39,7 @@ public record AssetResponse(
                 asset.getNotes(),
                 asset.getCreatedAt(),
                 asset.getUpdatedAt(),
-                asset.getLocation().getId());
+                LocationResponse.fromEntity(asset.getLocation())
+            );
     }
 }

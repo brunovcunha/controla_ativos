@@ -1,7 +1,5 @@
 package br.com.brunov.controla_ativos.controla_ativos.department.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record DepartmentUpdateRequest(

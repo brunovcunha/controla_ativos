@@ -3,8 +3,6 @@ package br.com.brunov.controla_ativos.controla_ativos.employee.dto;
 
 import br.com.brunov.controla_ativos.controla_ativos.employee.entities.EmployeeStatus;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record EmployeeUpdateRequest(

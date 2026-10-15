@@ -9,15 +9,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record AssetUpdateRequest(
-    @NotBlank(message = "O patrimônio é obrigatório.")
+    // @NotBlank(message = "O patrimônio é obrigatório.")
     @Size(max = 50)
     String assetTag,
 
-    @NotBlank(message = "O nome do ativo é obrigatório.")
+    // @NotBlank(message = "O nome do ativo é obrigatório.")
     @Size(max = 150)
     String name,
 
-    @NotNull(message = "O tipo do ativo é obrigatório.")
+    // @NotNull(message = "O tipo do ativo é obrigatório.")
     AssetType type,
 
     @Size(max = 100)
@@ -29,7 +29,7 @@ public record AssetUpdateRequest(
     @Size(max = 100)
     String serialNumber,
 
-    @NotNull(message = "O status do ativo é obrigatório.")
+    // @NotNull(message = "O status do ativo é obrigatório.")
     AssetStatus status,
 
     LocalDate purchaseDate,
@@ -37,7 +37,7 @@ public record AssetUpdateRequest(
     @Size(max = 500)
     String notes,
 
-    @NotBlank(message = "A localização é obrigatória.")
+    // @NotBlank(message = "A localização é obrigatória.")
     Long locationId
 
 ) {

@@ -110,7 +110,7 @@ public class LocationService {
                 locationRepository.save(location);
         }
 
-        private Location findLocation(Long id) {
+        public  Location findLocation(Long id) {
 
                 return locationRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException(

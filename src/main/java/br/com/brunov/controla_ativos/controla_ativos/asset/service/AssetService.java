@@ -13,15 +13,16 @@ import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetStatus;
 import br.com.brunov.controla_ativos.controla_ativos.asset.repository.AssetRepository;
 import br.com.brunov.controla_ativos.controla_ativos.location.entities.Location;
 import br.com.brunov.controla_ativos.controla_ativos.location.repository.LocationRepository;
+import br.com.brunov.controla_ativos.controla_ativos.location.service.LocationService;
 
-@Service 
+@Service
 public class AssetService {
     private final AssetRepository assetRepository;
-    private final LocationRepository locationRepository;
+    private final LocationService locationService;
 
-    public AssetService(AssetRepository assetRepository, LocationRepository locationRepository) {
+    public AssetService(AssetRepository assetRepository, LocationService locationService) {
         this.assetRepository = assetRepository;
-        this.locationRepository = locationRepository;
+        this.locationService = locationService;
     }
 
     @Transactional
@@ -29,22 +30,24 @@ public class AssetService {
 
         if (assetRepository.existsByAssetTag(request.assetTag())) {
             throw new IllegalArgumentException(
-                "Já existe um ativo cadastrado com o patrimônio: "
-                    + request.assetTag()
-            );
+                    "Já existe um ativo cadastrado com o patrimônio: "
+                            + request.assetTag());
         }
 
         Asset asset = Asset.builder()
-            .assetTag(request.assetTag())
-            .name(request.name())
-            .type(request.type())
-            .brand(request.brand())
-            .model(request.model())
-            .serialNumber(request.serialNumber())
-            .purchaseDate(request.purchaseDate())
-            .notes(request.notes())
-            .status(AssetStatus.AVAILABLE)
-            .build();
+                .assetTag(request.assetTag())
+                .name(request.name())
+                .type(request.type())
+                .brand(request.brand())
+                .model(request.model())
+                .serialNumber(request.serialNumber())
+                .purchaseDate(request.purchaseDate())
+                .notes(request.notes())
+                .status(AssetStatus.AVAILABLE)
+                .location(request.locationId() == null
+                        ? null
+                        : locationService.findLocation(request.locationId()))
+                .build();
 
         Asset savedAsset = assetRepository.save(asset);
 
@@ -55,20 +58,17 @@ public class AssetService {
     public List<AssetResponse> findAll() {
 
         return assetRepository.findAll()
-            .stream()
-            .map(AssetResponse::fromEntity)
-            .toList();
+                .stream()
+                .map(AssetResponse::fromEntity)
+                .toList();
     }
 
-    @Transactional (readOnly = true)
+    @Transactional(readOnly = true)
     public AssetResponse findById(Long id) {
 
         Asset asset = assetRepository.findById(id)
-            .orElseThrow(() ->
-                new RuntimeException(
-                    "Ativo não encontrado: " + id
-                )
-            );
+                .orElseThrow(() -> new RuntimeException(
+                        "Ativo não encontrado: " + id));
 
         return AssetResponse.fromEntity(asset);
     }
@@ -79,26 +79,51 @@ public class AssetService {
             AssetUpdateRequest request) {
 
         Asset asset = assetRepository.findById(id)
-            .orElseThrow(() ->
-                new RuntimeException(
-                    "Ativo não encontrado: " + id
-                )
-            );
+                .orElseThrow(() -> new RuntimeException(
+                        "Ativo não encontrado: " + id));
 
-        Location location = locationRepository.findById(request.locationId()).orElseThrow(() -> 
-                new RuntimeException("Localização do ativo não encontrada!")
-    );
+        if (request.assetTag() != null) {
+            asset.setAssetTag(request.assetTag());
+        }
 
-        asset.setAssetTag(request.assetTag());
-        asset.setName(request.name());
-        asset.setType(request.type());
-        asset.setBrand(request.brand());
-        asset.setModel(request.model());
-        asset.setSerialNumber(request.serialNumber());
-        asset.setStatus(request.status());
-        asset.setPurchaseDate(request.purchaseDate());
-        asset.setNotes(request.notes());
-        asset.setLocation(location);
+        if (request.name() != null) {
+            asset.setName(request.name());
+        }
+
+        if (request.type() != null) {
+            asset.setType(request.type());
+        }
+
+        if (request.brand() != null) {
+            asset.setBrand(request.brand());
+        }
+
+        if (request.model() != null) {
+            asset.setModel(request.model());
+        }
+
+        if (request.serialNumber() != null) {
+            asset.setSerialNumber(request.serialNumber());
+        }
+
+        if (request.status() != null) {
+            asset.setStatus(request.status());
+        }
+
+        if (request.purchaseDate() != null) {
+            asset.setPurchaseDate(request.purchaseDate());
+        }
+
+        if (request.notes() != null) {
+            asset.setNotes(request.notes());
+        }
+
+        if (request.locationId() != null) {
+            Location location = locationService.findLocation(
+                    request.locationId());
+
+            asset.setLocation(location);
+        }
 
         Asset updatedAsset = assetRepository.save(asset);
 
@@ -110,8 +135,7 @@ public class AssetService {
 
         if (!assetRepository.existsById(id)) {
             throw new RuntimeException(
-                "Ativo não encontrado: " + id
-            );
+                    "Ativo não encontrado: " + id);
         }
 
         assetRepository.deleteById(id);

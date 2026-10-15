@@ -3,8 +3,10 @@ package br.com.brunov.controla_ativos.controla_ativos.asset.dto;
 import java.time.LocalDate;
 
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetType;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 
 public record AssetRequest(
@@ -33,7 +35,6 @@ public record AssetRequest(
     @Size(max = 500)
     String notes,
 
-    @NotBlank(message = "A localização é obrigatória.")
     Long locationId
 ) {
     

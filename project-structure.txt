@@ -64,17 +64,19 @@
 │   ├── entity/
 │   ├── repository/
 │   └── service/
-│
-├── shared/
-│   ├── exception/
-│   ├── response/
-│   ├── validation/
-│   └── util/
-│
+|
+├── Maintenance/
+│   ├── controller/
+│   ├── dto/
+│   ├── entity/
+│   ├── repository/
+│   └── service/
+|
 └── config/
     ├── security/
     ├── jackson/
     └── database/
+    └── exception/
 
 
 ---------------------------------------------------------------

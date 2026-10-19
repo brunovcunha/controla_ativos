@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.brunov.controla_ativos.controla_ativos.department.entities.Department;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceConflictException;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceNotFoundException;
 import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationRequest;
 import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationResponse;
 import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationUpdateRequest;
@@ -24,7 +25,7 @@ public class LocationService {
 
                 if (locationRepository.existsByCode(request.code())) {
 
-                        throw new IllegalArgumentException(
+                        throw new ResourceConflictException(
                                         "Já existe uma localização com o código: "
                                                         + request.code());
                 }
@@ -69,7 +70,7 @@ public class LocationService {
                         if (!location.getCode().equals(request.code())
                                         && locationRepository.existsByCode(request.code())) {
 
-                                throw new IllegalArgumentException(
+                                throw new ResourceConflictException(
                                                 "Já existe uma localização com o código: "
                                                                 + request.code());
                         }
@@ -113,7 +114,7 @@ public class LocationService {
         public  Location findLocation(Long id) {
 
                 return locationRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException(
+                                .orElseThrow(() -> new ResourceNotFoundException(
                                                 "Localização não encontrada: " + id));
         }
 

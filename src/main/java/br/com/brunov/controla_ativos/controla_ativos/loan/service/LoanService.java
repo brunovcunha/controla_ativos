@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.Asset;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetStatus;
 import br.com.brunov.controla_ativos.controla_ativos.asset.repository.AssetRepository;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.BusinessException;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceNotFoundException;
 import br.com.brunov.controla_ativos.controla_ativos.employee.entities.Employee;
 import br.com.brunov.controla_ativos.controla_ativos.employee.repository.EmployeeRepository;
 import br.com.brunov.controla_ativos.controla_ativos.loan.dto.LoanRequest;
@@ -38,7 +40,7 @@ public class LoanService {
 
         Asset asset = assetRepository.findById(request.assetId())
             .orElseThrow(() ->
-                new RuntimeException(
+                new ResourceNotFoundException(
                     "Ativo não encontrado: " + request.assetId()
                 )
             );
@@ -54,7 +56,7 @@ public class LoanService {
 
         Employee employee = employeeRepository.findById(request.employeeId())
     .orElseThrow(() ->
-        new RuntimeException(
+        new ResourceNotFoundException(
             "Funcionário não encontrado: " + request.employeeId()
         )
     );
@@ -103,7 +105,7 @@ public class LoanService {
         Loan loan = findLoan(id);
 
         if (loan.getStatus() != LoanStatus.SCHEDULED) {
-            throw new IllegalStateException(
+            throw new BusinessException(
                 "Somente empréstimos agendados podem ser alterados."
             );
         }
@@ -115,7 +117,7 @@ public class LoanService {
 
         Asset asset = assetRepository.findById(request.assetId())
             .orElseThrow(() ->
-                new RuntimeException(
+                new ResourceNotFoundException(
                     "Ativo não encontrado: " + request.assetId()
                 )
             );
@@ -131,7 +133,7 @@ public class LoanService {
 
         Employee employee = employeeRepository.findById(request.employeeId())
     .orElseThrow(() ->
-        new RuntimeException(
+        new ResourceNotFoundException(
             "Funcionário não encontrado: " + request.employeeId()
         )
     );
@@ -157,7 +159,7 @@ public class LoanService {
         if (loan.getStatus() != LoanStatus.SCHEDULED &&
             loan.getStatus() != LoanStatus.PENDING_PICKUP) {
 
-            throw new IllegalStateException(
+            throw new BusinessException(
                 "O empréstimo não está disponível para retirada."
             );
         }
@@ -165,7 +167,7 @@ public class LoanService {
         Asset asset = loan.getAsset();
 
         if (asset.getStatus() != AssetStatus.AVAILABLE) {
-            throw new IllegalStateException(
+            throw new BusinessException(
                 "O ativo não está disponível para retirada."
             );
         }
@@ -185,7 +187,7 @@ public class LoanService {
         Loan loan = findLoan(id);
 
         if (loan.getStatus() != LoanStatus.IN_USE) {
-            throw new IllegalStateException(
+            throw new BusinessException(
                 "Somente empréstimos em uso podem ser devolvidos."
             );
         }
@@ -209,7 +211,7 @@ public class LoanService {
         if (loan.getStatus() != LoanStatus.SCHEDULED &&
             loan.getStatus() != LoanStatus.PENDING_PICKUP) {
 
-            throw new IllegalStateException(
+            throw new BusinessException(
                 "Este empréstimo não pode mais ser cancelado."
             );
         }
@@ -224,7 +226,7 @@ public class LoanService {
 
         return loanRepository.findById(id)
             .orElseThrow(() ->
-                new RuntimeException(
+                new ResourceNotFoundException(
                     "Empréstimo não encontrado: " + id
                 )
             );
@@ -238,7 +240,7 @@ public class LoanService {
 
         if (!start.isBefore(end)) {
 
-            throw new IllegalArgumentException(
+            throw new BusinessException(
                 "A data inicial deve ser anterior à data final."
             );
         }
@@ -250,7 +252,7 @@ public class LoanService {
         if (asset.getStatus() == AssetStatus.MAINTENANCE ||
             asset.getStatus() == AssetStatus.DISCARDED) {
 
-            throw new IllegalStateException(
+            throw new BusinessException(
                 "O ativo não está disponível para empréstimo."
             );
         }
@@ -287,7 +289,7 @@ public class LoanService {
 
         if (conflict) {
 
-            throw new IllegalStateException(
+            throw new BusinessException(
                 "O ativo já possui um empréstimo "
                 + "agendado para este período."
             );

@@ -1,4 +1,4 @@
-package br.com.brunov.controla_ativos.controla_ativos.config;
+package br.com.brunov.controla_ativos.controla_ativos.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

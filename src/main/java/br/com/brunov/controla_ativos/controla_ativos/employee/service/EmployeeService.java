@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceConflictException;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceNotFoundException;
 import br.com.brunov.controla_ativos.controla_ativos.department.entities.Department;
 import br.com.brunov.controla_ativos.controla_ativos.department.repository.DepartmentRepository;
 import br.com.brunov.controla_ativos.controla_ativos.employee.dto.EmployeeRequest;
@@ -28,7 +30,7 @@ public class EmployeeService {
                 if (employeeRepository
                                 .existsByRegistration(request.registration())) {
 
-                        throw new IllegalArgumentException(
+                        throw new ResourceConflictException(
                                         "Já existe um funcionário com a matrícula: "
                                                         + request.registration());
                 }
@@ -42,7 +44,7 @@ public class EmployeeService {
                 }
 
                 Department department = departmentRepository.findById(request.departmentId())
-                                .orElseThrow(() -> new RuntimeException(
+                                .orElseThrow(() -> new ResourceNotFoundException(
                                                 "Departamento não encontrado: " + request.departmentId()));
 
                 Employee employee = Employee.builder()
@@ -92,7 +94,7 @@ public class EmployeeService {
                                         && employeeRepository
                                                         .existsByRegistration(request.registration())) {
 
-                                throw new IllegalArgumentException(
+                                throw new ResourceConflictException(
                                                 "Já existe um funcionário com a matrícula: "
                                                                 + request.registration());
                         }
@@ -109,7 +111,7 @@ public class EmployeeService {
                                         && employeeRepository
                                                         .existsByEmail(request.email())) {
 
-                                throw new IllegalArgumentException(
+                                throw new ResourceConflictException(
                                                 "Já existe um funcionário com o e-mail: "
                                                                 + request.email());
                         }
@@ -122,7 +124,7 @@ public class EmployeeService {
                 if (request.departmentId() != null) {
 
                         Department department = departmentRepository.findById(request.departmentId())
-                                        .orElseThrow(() -> new RuntimeException(
+                                        .orElseThrow(() -> new ResourceNotFoundException(
                                                         "Departamento não encontrado: " + request.departmentId()));
 
                         employee.setDepartment(department);
@@ -172,7 +174,7 @@ public class EmployeeService {
         private Employee findEmployee(Long id) {
 
                 return employeeRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException(
+                                .orElseThrow(() -> new ResourceNotFoundException(
                                                 "Funcionário não encontrado: " + id));
         }
 }

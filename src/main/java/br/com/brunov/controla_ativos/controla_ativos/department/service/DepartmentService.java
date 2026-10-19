@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceConflictException;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceNotFoundException;
 import br.com.brunov.controla_ativos.controla_ativos.department.dto.DepartmentRequest;
 import br.com.brunov.controla_ativos.controla_ativos.department.dto.DepartmentResponse;
 import br.com.brunov.controla_ativos.controla_ativos.department.dto.DepartmentUpdateRequest;
@@ -25,7 +27,7 @@ public class DepartmentService {
         if (departmentRepository
                 .existsByCode(request.code())) {
 
-            throw new IllegalArgumentException(
+            throw new ResourceConflictException(
                     "Já existe um departamento com o código: "
                             + request.code());
         }
@@ -75,7 +77,7 @@ public class DepartmentService {
                     && departmentRepository
                             .existsByCode(request.code())) {
 
-                throw new IllegalArgumentException(
+                throw new ResourceConflictException(
                         "Já existe um departamento com o código: "
                                 + request.code());
             }
@@ -126,7 +128,7 @@ public class DepartmentService {
     private Department findDepartment(Long id) {
 
         return departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Departamento não encontrado: " + id));
     }
 }

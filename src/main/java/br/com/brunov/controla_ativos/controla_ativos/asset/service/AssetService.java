@@ -11,8 +11,10 @@ import br.com.brunov.controla_ativos.controla_ativos.asset.dto.AssetUpdateReques
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.Asset;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetStatus;
 import br.com.brunov.controla_ativos.controla_ativos.asset.repository.AssetRepository;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceConflictException;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceNotFoundException;
 import br.com.brunov.controla_ativos.controla_ativos.location.entities.Location;
-import br.com.brunov.controla_ativos.controla_ativos.location.repository.LocationRepository;
+
 import br.com.brunov.controla_ativos.controla_ativos.location.service.LocationService;
 
 @Service
@@ -29,7 +31,7 @@ public class AssetService {
     public AssetResponse create(AssetRequest request) {
 
         if (assetRepository.existsByAssetTag(request.assetTag())) {
-            throw new IllegalArgumentException(
+            throw new ResourceConflictException(
                     "Já existe um ativo cadastrado com o patrimônio: "
                             + request.assetTag());
         }
@@ -67,7 +69,7 @@ public class AssetService {
     public AssetResponse findById(Long id) {
 
         Asset asset = assetRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Ativo não encontrado: " + id));
 
         return AssetResponse.fromEntity(asset);
@@ -79,7 +81,7 @@ public class AssetService {
             AssetUpdateRequest request) {
 
         Asset asset = assetRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Ativo não encontrado: " + id));
 
         if (request.assetTag() != null) {
@@ -134,7 +136,7 @@ public class AssetService {
     public void delete(Long id) {
 
         if (!assetRepository.existsById(id)) {
-            throw new RuntimeException(
+            throw new ResourceNotFoundException(
                     "Ativo não encontrado: " + id);
         }
 

@@ -10,6 +10,9 @@ import org.springframework.validation.annotation.Validated;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.Asset;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetStatus;
 import br.com.brunov.controla_ativos.controla_ativos.asset.repository.AssetRepository;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.BusinessException;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceConflictException;
+import br.com.brunov.controla_ativos.controla_ativos.config.exception.ResourceNotFoundException;
 import br.com.brunov.controla_ativos.controla_ativos.employee.entities.Employee;
 import br.com.brunov.controla_ativos.controla_ativos.employee.repository.EmployeeRepository;
 import br.com.brunov.controla_ativos.controla_ativos.maintenance.dto.MaintenanceRequest;
@@ -47,7 +50,7 @@ public class MaintenanceService {
 
         if (asset.getStatus() == AssetStatus.MAINTENANCE
                 || asset.getStatus() == AssetStatus.DISCARDED) {
-            throw new IllegalStateException(
+            throw new BusinessException(
                     "O ativo não pode receber uma nova manutenção.");
         }
 
@@ -122,13 +125,13 @@ public class MaintenanceService {
 
         if (maintenance.getStatus() == MaintenanceStatus.COMPLETED
                 || maintenance.getStatus() == MaintenanceStatus.CANCELLED) {
-            throw new IllegalStateException(
+            throw new BusinessException(
                     "Não é permitido alterar uma manutenção concluída ou cancelada.");
         }
 
         if (request.getType() != null) {
             if (maintenance.getStatus() != MaintenanceStatus.SCHEDULED) {
-                throw new IllegalStateException(
+                throw new BusinessException(
                         "O tipo só pode ser alterado antes do início da manutenção.");
             }
 
@@ -137,7 +140,7 @@ public class MaintenanceService {
 
         if (request.getTitle() != null) {
             if (request.getTitle().isBlank()) {
-                throw new IllegalArgumentException(
+                throw new BusinessException(
                         "O título não pode ficar vazio.");
             }
 
@@ -150,7 +153,7 @@ public class MaintenanceService {
 
         if (request.getScheduledDate() != null) {
             if (maintenance.getStatus() != MaintenanceStatus.SCHEDULED) {
-                throw new IllegalStateException(
+                throw new BusinessException(
                         "A data agendada só pode ser alterada antes do início.");
             }
 
@@ -182,14 +185,14 @@ public class MaintenanceService {
         Maintenance maintenance = findMaintenance(id);
 
         if (maintenance.getStatus() != MaintenanceStatus.SCHEDULED) {
-            throw new IllegalStateException(
+            throw new ResourceConflictException(
                     "Somente manutenções agendadas podem ser iniciadas.");
         }
 
         Asset asset = maintenance.getAsset();
 
         if (asset.getStatus() != AssetStatus.AVAILABLE) {
-            throw new IllegalStateException(
+            throw new BusinessException(
                     "O ativo precisa estar disponível para iniciar a manutenção.");
         }
 
@@ -199,7 +202,7 @@ public class MaintenanceService {
                         MaintenanceStatus.IN_PROGRESS);
 
         if (anotherMaintenanceInProgress) {
-            throw new IllegalStateException(
+            throw new ResourceConflictException(
                     "Já existe uma manutenção em andamento para este ativo.");
         }
 
@@ -222,7 +225,7 @@ public class MaintenanceService {
         Maintenance maintenance = findMaintenance(id);
 
         if (maintenance.getStatus() != MaintenanceStatus.IN_PROGRESS) {
-            throw new IllegalStateException(
+            throw new BusinessException(
                     "Somente manutenções em andamento podem ser concluídas.");
         }
 
@@ -247,7 +250,7 @@ public class MaintenanceService {
         Maintenance maintenance = findMaintenance(id);
 
         if (maintenance.getStatus() != MaintenanceStatus.SCHEDULED) {
-            throw new IllegalStateException(
+            throw new BusinessException(
                     "Somente manutenções agendadas podem ser canceladas.");
         }
 
@@ -262,19 +265,19 @@ public class MaintenanceService {
 
     private Maintenance findMaintenance(Long id) {
         return maintenanceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Manutenção não encontrada: " + id));
     }
 
     private Asset findAsset(Long id) {
         return assetRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Ativo não encontrado: " + id));
     }
 
     private Employee findEmployee(Long id) {
         return employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Funcionário não encontrado: " + id));
     }
 }

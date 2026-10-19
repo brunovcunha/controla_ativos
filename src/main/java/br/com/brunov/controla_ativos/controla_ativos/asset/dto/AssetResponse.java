@@ -7,7 +7,6 @@ import br.com.brunov.controla_ativos.controla_ativos.asset.entities.Asset;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetStatus;
 import br.com.brunov.controla_ativos.controla_ativos.asset.entities.AssetType;
 import br.com.brunov.controla_ativos.controla_ativos.location.dto.LocationResponse;
-import br.com.brunov.controla_ativos.controla_ativos.location.entities.Location;
 
 public record AssetResponse(
 
@@ -39,7 +38,8 @@ public record AssetResponse(
                 asset.getNotes(),
                 asset.getCreatedAt(),
                 asset.getUpdatedAt(),
-                LocationResponse.fromEntity(asset.getLocation())
-            );
+                asset.getLocation() != null
+                        ? LocationResponse.fromEntity(asset.getLocation())
+                        : null);
     }
 }

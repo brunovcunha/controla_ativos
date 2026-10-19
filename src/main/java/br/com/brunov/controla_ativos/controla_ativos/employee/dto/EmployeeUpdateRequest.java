@@ -11,7 +11,7 @@ public record EmployeeUpdateRequest(
     @Size(max = 20)
     String registration,
 
-    // @NotBlank(message = "O nome é obrigatório.")
+    // @NotBlank(message = "O nome é obrigatório.") 
     @Size(max = 150)
     String name,
 
@@ -34,6 +34,6 @@ public record EmployeeUpdateRequest(
 
     // @NotNull(message = "O id do departamento é obrigatório")
     Long departmentId
-    
+
 ) {
 }

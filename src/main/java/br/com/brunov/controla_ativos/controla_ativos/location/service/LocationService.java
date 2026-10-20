@@ -23,17 +23,17 @@ public class LocationService {
         @Transactional
         public LocationResponse create(LocationRequest request) {
 
-                if (locationRepository.existsByCode(request.code())) {
-
+                if (!locationRepository.findByName(request.name()).isEmpty()) {
                         throw new ResourceConflictException(
                                         "Já existe uma localização com o código: "
-                                                        + request.code());
+                                                        + request.name());
                 }
 
+
                 Location location = Location.builder()
-                                .code(request.code())
                                 .name(request.name())
-                                .description(request.description())
+                                .address(request.address())
+                                .room(request.room())
                                 .active(true)
                                 .build();
 
@@ -66,28 +66,20 @@ public class LocationService {
 
                 Location location = findLocation(id);
 
-                if (request.code() != null) {
-                        if (!location.getCode().equals(request.code())
-                                        && locationRepository.existsByCode(request.code())) {
-
-                                throw new ResourceConflictException(
-                                                "Já existe uma localização com o código: "
-                                                                + request.code());
-                        }
-
-                        location.setCode(request.code());
-                }
-
                 if (request.name() != null) {
                         location.setName(request.name());
                 }
 
-                if (request.description() != null) {
-                        location.setDescription(request.description());
+                if (request.address() != null) {
+                        location.setAddress(request.address());
                 }
 
                 if (request.active() != null) {
                         location.setActive(request.active());
+                }
+
+                if (request.room() != null) {
+                        location.setRoom(request.room());
                 }
 
                 Location updatedLocation = locationRepository.save(location);

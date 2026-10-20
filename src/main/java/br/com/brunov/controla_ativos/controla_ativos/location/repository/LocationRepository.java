@@ -4,12 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.brunov.controla_ativos.controla_ativos.location.entities.Location;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface LocationRepository
         extends JpaRepository<Location, Long> {
 
-    Optional<Location> findByCode(String code);
-
-    boolean existsByCode(String code);
+    List<Location> findByName(String name);
 }

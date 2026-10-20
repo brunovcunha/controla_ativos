@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,9 +48,9 @@ class LocationServiceTest {
     void setUp() {
         location = Location.builder()
                 .id(1L)
-                .code("LOC-001")
                 .name("Sala de TI")
-                .description("Sala principal de tecnologia")
+                .address("Av. Brasil, 1500")
+                .room("3º andar - TI")
                 .active(true)
                 .build();
     }
@@ -57,12 +59,11 @@ class LocationServiceTest {
     void shouldCreateLocationSuccessfully() {
         // Arrange
         LocationRequest request = new LocationRequest(
-                "LOC-002",
                 "Estoque",
-                "Local de armazenamento");
+                "Av. Brasil, 1500",
+                "Subsolo");
 
-        when(locationRepository.existsByCode("LOC-002"))
-                .thenReturn(false);
+        when(locationRepository.findByName("Estoque")).thenReturn(List.of(location));
 
         when(locationRepository.save(any(Location.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -73,31 +74,31 @@ class LocationServiceTest {
         // Assert
         assertNotNull(response);
 
-        ArgumentCaptor<Location> captor = ArgumentCaptor.forClass(Location.class);
+        ArgumentCaptor<Location> captor =
+                ArgumentCaptor.forClass(Location.class);
 
         verify(locationRepository).save(captor.capture());
 
         Location savedLocation = captor.getValue();
 
-        assertEquals("LOC-002", savedLocation.getCode());
         assertEquals("Estoque", savedLocation.getName());
-        assertEquals("Local de armazenamento",
-                savedLocation.getDescription());
+        assertEquals("Av. Brasil, 1500", savedLocation.getAddress());
+        assertEquals("Subsolo", savedLocation.getRoom());
         assertTrue(savedLocation.getActive());
 
-        verify(locationRepository).existsByCode("LOC-002");
+        verify(locationRepository).findByName("Estoque");
     }
 
     @Test
-    void shouldThrowConflictWhenCreatingDuplicateCode() {
+    void shouldThrowConflictWhenCreatingDuplicateName() {
         // Arrange
         LocationRequest request = new LocationRequest(
-                "LOC-001",
-                "Nova localização",
-                "Descrição");
+                "Sala de TI",
+                "Outro endereço",
+                "Sala 10");
 
-        when(locationRepository.existsByCode("LOC-001"))
-                .thenReturn(true);
+        when(locationRepository.findByName("Sala de TI"))
+                .thenReturn(List.of(location));
 
         // Act & Assert
         assertThrows(
@@ -112,9 +113,9 @@ class LocationServiceTest {
         // Arrange
         Location secondLocation = Location.builder()
                 .id(2L)
-                .code("LOC-002")
                 .name("Estoque")
-                .description("Armazenamento")
+                .address("Rua Central, 200")
+                .room("Subsolo")
                 .active(true)
                 .build();
 
@@ -168,8 +169,8 @@ class LocationServiceTest {
     void shouldUpdateLocationPartially() {
         // Arrange
         LocationUpdateRequest request = new LocationUpdateRequest(
-                null,
                 "Sala de TI atualizada",
+                null,
                 null,
                 null);
 
@@ -185,41 +186,65 @@ class LocationServiceTest {
         // Assert
         assertNotNull(response);
 
-        ArgumentCaptor<Location> captor = ArgumentCaptor.forClass(Location.class);
+        ArgumentCaptor<Location> captor =
+                ArgumentCaptor.forClass(Location.class);
 
         verify(locationRepository).save(captor.capture());
 
         Location updatedLocation = captor.getValue();
 
-        assertEquals("LOC-001", updatedLocation.getCode());
         assertEquals("Sala de TI atualizada", updatedLocation.getName());
-        assertEquals(
-                "Sala principal de tecnologia",
-                updatedLocation.getDescription());
+        assertEquals("Av. Brasil, 1500", updatedLocation.getAddress());
+        assertEquals("3º andar - TI", updatedLocation.getRoom());
         assertTrue(updatedLocation.getActive());
     }
 
     @Test
-    void shouldThrowConflictWhenUpdatingToExistingCode() {
+    void shouldUpdateLocationAddressAndRoom() {
         // Arrange
         LocationUpdateRequest request = new LocationUpdateRequest(
-                "LOC-002",
                 null,
-                null,
+                "Rua Nova, 500",
+                "2º andar",
                 null);
 
         when(locationRepository.findById(1L))
                 .thenReturn(Optional.of(location));
 
-        when(locationRepository.existsByCode("LOC-002"))
-                .thenReturn(true);
+        when(locationRepository.save(any(Location.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Act & Assert
-        assertThrows(
-                ResourceConflictException.class,
-                () -> locationService.update(1L, request));
+        // Act
+        LocationResponse response = locationService.update(1L, request);
 
-        verify(locationRepository, never()).save(any(Location.class));
+        // Assert
+        assertNotNull(response);
+        assertEquals("Rua Nova, 500", response.address());
+        assertEquals("2º andar", response.room());
+        assertEquals("Sala de TI", response.name());
+    }
+
+    @Test
+    void shouldUpdateLocationActiveStatus() {
+        // Arrange
+        LocationUpdateRequest request = new LocationUpdateRequest(
+                null,
+                null,
+                null,
+                false);
+
+        when(locationRepository.findById(1L))
+                .thenReturn(Optional.of(location));
+
+        when(locationRepository.save(any(Location.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        LocationResponse response = locationService.update(1L, request);
+
+        // Assert
+        assertNotNull(response);
+        assertFalse(response.active());
     }
 
     @Test
@@ -235,7 +260,8 @@ class LocationServiceTest {
         locationService.delete(1L);
 
         // Assert
-        ArgumentCaptor<Location> captor = ArgumentCaptor.forClass(Location.class);
+        ArgumentCaptor<Location> captor =
+                ArgumentCaptor.forClass(Location.class);
 
         verify(locationRepository).save(captor.capture());
 
@@ -244,7 +270,7 @@ class LocationServiceTest {
         assertFalse(deletedLocation.getActive());
         assertEquals(1L, deletedLocation.getId());
 
-        // A exclusão lógica não deve remover o registro do banco.
+        // A exclusão lógica não remove o registro do banco.
         verify(locationRepository, never()).deleteById(anyLong());
         verify(locationRepository, never()).delete(any(Location.class));
     }

@@ -7,9 +7,9 @@ import br.com.brunov.controla_ativos.controla_ativos.location.entities.Location;
 public record LocationResponse(
 
     Long id,
-    String code,
     String name,
-    String description,
+    String address,
+    String room,
     Boolean active,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
@@ -20,9 +20,9 @@ public record LocationResponse(
 
         return new LocationResponse(
             location.getId(),
-            location.getCode(),
             location.getName(),
-            location.getDescription(),
+            location.getRoom(),
+            location.getAddress(),
             location.getActive(),
             location.getCreatedAt(),
             location.getUpdatedAt()

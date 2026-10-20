@@ -28,14 +28,14 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20, unique = true)
-    private String code;
-
     @Column(nullable = false, length = 100)
     private String name;
 
     @Column(length = 255)
-    private String description;
+    private String address;
+
+    @Column(length = 255)
+    private String room;
 
     @Column(nullable = false)
     private Boolean active;

@@ -64,8 +64,12 @@ public class Asset {
     @Column(name = "purchase_date")
     private java.time.LocalDate purchaseDate;
 
+
     @Column(length = 500)
     private String notes;
+
+    @Column(name = "asset_value")
+    private Double assetValue;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

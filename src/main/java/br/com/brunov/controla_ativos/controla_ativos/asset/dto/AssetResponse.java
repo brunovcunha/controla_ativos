@@ -22,6 +22,7 @@ public record AssetResponse(
         String notes,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
+        Double assetValue,
         LocationResponse location) {
 
     public static AssetResponse fromEntity(Asset asset) {
@@ -38,8 +39,10 @@ public record AssetResponse(
                 asset.getNotes(),
                 asset.getCreatedAt(),
                 asset.getUpdatedAt(),
+                asset.getAssetValue(),
                 asset.getLocation() != null
                         ? LocationResponse.fromEntity(asset.getLocation())
                         : null);
+
     }
 }

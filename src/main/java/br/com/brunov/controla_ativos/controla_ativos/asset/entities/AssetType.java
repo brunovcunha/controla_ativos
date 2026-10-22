@@ -7,7 +7,6 @@ public enum AssetType {
     PRINTER,
     SERVER,
     SWITCH,
-    ROUTER,
     PHONE,
     TABLET,
     OTHER

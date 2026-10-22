@@ -36,7 +36,9 @@ public record AssetUpdateRequest(
     String notes,
 
     // @NotBlank(message = "A localização é obrigatória.")
-    Long locationId
+    Long locationId,
+
+    Double assetValue
 
 ) {
 }

@@ -120,9 +120,9 @@ public class DepartmentService {
          * Isso preserva o histórico dos funcionários
          * que pertenciam ao departamento.
          */
-        department.setActive(false);
+        // department.setActive(false);
 
-        departmentRepository.save(department);
+        departmentRepository.deleteById(id);
     }
 
     private Department findDepartment(Long id) {

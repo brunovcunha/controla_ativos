@@ -98,9 +98,9 @@ public class LocationService {
                  * Isso preserva o histórico dos funcionários
                  * que pertenciam ao departamento.
                  */
-                location.setActive(false);
+                // location.setActive(false);
 
-                locationRepository.save(location);
+                locationRepository.deleteById(id);
         }
 
         public  Location findLocation(Long id) {

@@ -46,6 +46,7 @@ public class AssetService {
                 .purchaseDate(request.purchaseDate())
                 .notes(request.notes())
                 .status(AssetStatus.AVAILABLE)
+                .assetValue(request.assetValue())
                 .location(request.locationId() == null
                         ? null
                         : locationService.findLocation(request.locationId()))
@@ -118,6 +119,10 @@ public class AssetService {
 
         if (request.notes() != null) {
             asset.setNotes(request.notes());
+        }
+
+        if (request.assetValue() != null) {
+            asset.setAssetValue(request.assetValue());
         }
 
         if (request.locationId() != null) {

@@ -23,7 +23,7 @@ public record AssetResponse(
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         Double assetValue,
-        LocationResponse location) {
+        long locationId) {
 
     public static AssetResponse fromEntity(Asset asset) {
         return new AssetResponse(
@@ -41,7 +41,7 @@ public record AssetResponse(
                 asset.getUpdatedAt(),
                 asset.getAssetValue(),
                 asset.getLocation() != null
-                        ? LocationResponse.fromEntity(asset.getLocation())
+                        ? asset.getLocation().getId()
                         : null);
 
     }

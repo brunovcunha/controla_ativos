@@ -192,7 +192,7 @@ public class LoanService {
             );
         }
 
-        loan.setReturnedAt(LocalDateTime.now());
+        loan.setReturnedAt(LocalDateTime.now());    
         loan.setStatus(LoanStatus.RETURNED);
 
         Asset asset = loan.getAsset();
@@ -219,6 +219,18 @@ public class LoanService {
         loan.setStatus(LoanStatus.CANCELLED);
 
         return LoanResponse.fromEntity(loan);
+    }
+
+    @Transactional 
+    public List<LoanResponse> findByLoanStatus(LoanStatus status) {
+        if (status == null) {
+            status = LoanStatus.SCHEDULED;
+        }
+        
+         return loanRepository.findByStatus(status)
+            .stream()
+            .map(LoanResponse::fromEntity)
+            .toList();
     }
 
 

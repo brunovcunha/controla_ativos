@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
+import br.com.brunov.controla_ativos.controla_ativos.loan.entities.LoanStatus;
+
 public record LoanUpdateRequest(
 
     @NotNull(message = "O ativo é obrigatório.")
@@ -26,6 +28,8 @@ public record LoanUpdateRequest(
     String purpose,
 
     @Size(max = 500)
-    String notes
+    String notes,
+
+    LoanStatus status
 ) {
 }

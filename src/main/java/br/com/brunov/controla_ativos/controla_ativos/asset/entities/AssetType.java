@@ -9,5 +9,6 @@ public enum AssetType {
     SWITCH,
     PHONE,
     TABLET,
-    OTHER
+    OTHER,
+    ROUTER
 }

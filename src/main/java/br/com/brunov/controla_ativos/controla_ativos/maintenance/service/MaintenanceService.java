@@ -249,9 +249,9 @@ public class MaintenanceService {
 
         Maintenance maintenance = findMaintenance(id);
 
-        if (maintenance.getStatus() != MaintenanceStatus.SCHEDULED) {
+        if (maintenance.getStatus() == MaintenanceStatus.COMPLETED) {
             throw new BusinessException(
-                    "Somente manutenções agendadas podem ser canceladas.");
+                    "Manutenção finalizada não pode ser cancelada.");
         }
 
         maintenance.setStatus(MaintenanceStatus.CANCELLED);

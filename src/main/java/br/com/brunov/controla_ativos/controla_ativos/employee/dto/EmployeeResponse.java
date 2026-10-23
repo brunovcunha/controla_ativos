@@ -28,7 +28,7 @@ public record EmployeeResponse(
 
     LocalDateTime updatedAt,
 
-    Department department
+    Long departmentId
 
 ) {
 
@@ -56,7 +56,7 @@ public record EmployeeResponse(
 
             employee.getUpdatedAt(),
 
-            employee.getDepartment()
+            employee.getDepartment().getId()
         );
     }
 }

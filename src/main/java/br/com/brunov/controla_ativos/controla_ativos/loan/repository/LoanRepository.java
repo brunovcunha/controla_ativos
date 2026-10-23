@@ -26,4 +26,6 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
         @Param("scheduledEnd") LocalDateTime scheduledEnd,
         @Param("statuses") List<LoanStatus> statuses
     );
+
+    List<Loan> findByStatus(LoanStatus status);
 }

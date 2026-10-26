@@ -14,7 +14,10 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:8081")
+                        .allowedOrigins(
+                                "http://localhost:8081",
+                                "http://192.168.1.134:8081"
+                        )
                         .allowedMethods(
                                 "GET",
                                 "POST",
@@ -24,9 +27,8 @@ public class CorsConfig {
                                 "OPTIONS"
                         )
                         .allowedHeaders("*")
-                        .allowCredentials(false);;
+                        .allowCredentials(false);
             }
         };
     }
 }
-

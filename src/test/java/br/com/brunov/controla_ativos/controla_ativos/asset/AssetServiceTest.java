@@ -77,7 +77,8 @@ class AssetServiceTest {
                 "SER123",
                 LocalDate.of(2025, 1, 15),
                 "Monitor para escritório",
-                null);
+                null,
+                500.0);
 
         when(assetRepository.existsByAssetTag("PAT002"))
                 .thenReturn(false);
@@ -105,7 +106,8 @@ class AssetServiceTest {
                 "SER456",
                 LocalDate.of(2025, 2, 10),
                 "Notebook para reuniões",
-                10L);
+                10L,
+                3000.00);
 
         when(assetRepository.existsByAssetTag("PAT003"))
                 .thenReturn(false);
@@ -135,7 +137,8 @@ class AssetServiceTest {
                 "SER789",
                 null,
                 null,
-                null);
+                null,
+                3000.00);
 
         when(assetRepository.existsByAssetTag("PAT001"))
                 .thenReturn(true);
@@ -216,7 +219,8 @@ class AssetServiceTest {
                 null, // status
                 null, // purchaseDate
                 "Equipamento atualizado", // notes
-                null // locationId
+                null, // locationId
+                null
         );
 
         when(assetRepository.findById(1L))
@@ -239,7 +243,7 @@ class AssetServiceTest {
     void shouldUpdateAssetTag() {
         AssetUpdateRequest request = new AssetUpdateRequest(
                 "PAT010", null, null, null, null,
-                null, null, null, null, null);
+                null, null, null, null, null, null);
 
         when(assetRepository.findById(1L))
                 .thenReturn(Optional.of(asset));
@@ -259,7 +263,7 @@ class AssetServiceTest {
 
         AssetUpdateRequest request = new AssetUpdateRequest(
                 null, null, null, null, null,
-                null, null, null, null, 20L);
+                null, null, null, null, 20L, null);
 
         when(assetRepository.findById(1L))
                 .thenReturn(Optional.of(asset));
@@ -281,7 +285,7 @@ class AssetServiceTest {
     void shouldThrowNotFoundWhenUpdatingNonexistentAsset() {
         AssetUpdateRequest request = new AssetUpdateRequest(
                 null, null, null, null, null,
-                null, null, null, null, null);
+                null, null, null, null, null, null);
 
         when(assetRepository.findById(99L))
                 .thenReturn(Optional.empty());
@@ -298,7 +302,7 @@ class AssetServiceTest {
     void shouldPropagateNotFoundWhenUpdatingToNonexistentLocation() {
         AssetUpdateRequest request = new AssetUpdateRequest(
                 null, null, null, null, null,
-                null, null, null, null, 99L);
+                null, null, null, null, 99L, null);
 
         when(assetRepository.findById(1L))
                 .thenReturn(Optional.of(asset));
